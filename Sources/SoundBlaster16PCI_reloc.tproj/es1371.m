@@ -469,13 +469,13 @@ void start_dac1(struct es1371_state *s)
 *									      *
 \*---------------------------------------------------------------------------*/
 
-void start_dac2(struct es1371_state *s)
+void start_dac2(struct es1371_state *s, BOOL noLock)
 {
     unsigned int	fshift;
     unsigned int	fragremain;
     unsigned long 	flags;
     
-    spin_lock_irqsave(&s->lock, flags);
+    if (!noLock) spin_lock_irqsave(&s->lock, flags);
 
     if (!(s->ctrl & CTRL_DAC2_EN))
     {
@@ -496,7 +496,7 @@ void start_dac2(struct es1371_state *s)
 				s->io+ES1371_REG_DAC2_SCOUNT);
     } /* if */
 
-    spin_unlock_irqrestore(&s->lock, flags);
+    if (!noLock) spin_unlock_irqrestore(&s->lock, flags);
 
     return;
 } /* start_dac2() */
