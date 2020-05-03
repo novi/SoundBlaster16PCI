@@ -1,0 +1,17 @@
+FILESTABLE = {
+    OTHER_SOURCES = (Makefile.preamble, Makefile, Makefile.postamble, Load_Commands.sect, Makefile.driver_preamble);
+    M_FILES = ();
+    C_FILES = ();
+    H_FILES = (ac97.h, es1371.h, SoundBlaster16PCIDriver.h);
+    OTHER_LINKED = ();
+    CLASSES = (es1371.m, SoundBlaster16PCIDriver.m);
+};
+LOCALIZABLE_FILES = {
+};
+LANGUAGE = German;
+PROJECTVERSION = 1.1;
+INSTALLDIR = "";
+PROJECTTYPE = Tool;
+PROJECTNAME = SoundBlaster16PCI_reloc;
+GENERATEMAIN = YES;
+DOCICONFILES = ();
