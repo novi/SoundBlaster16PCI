@@ -44,6 +44,7 @@ static const char codecDeviceKind[] = "Audio";
 
 static struct es1371_state	*s=NULL;
 static IOInterruptHandler	oldHandler=NULL;
+static int oldHandlerInvoked=0;
 
 @implementation SoundBlaster16PCIDriver
 
@@ -260,12 +261,16 @@ static IOInterruptHandler	oldHandler=NULL;
 
 - (BOOL)startDMAForChannel:(unsigned int)localChannel read:(BOOL)isRead buffer:(IOEISADMABuffer)buffer bufferSizeForInterrupts:(unsigned int)bufferSize
 {
+
     unsigned int	left;
     unsigned int	right;
     unsigned int	mute;
     unsigned int	encoding;
     unsigned int	mode=[self channelCount];
     
+	IOLog("%s: startDMAForChannel, %d, %d, buf=%x, size=%d\n", DRV_TITLE, localChannel, isRead, buffer, bufferSize);
+//return YES;
+
 				/* Reenable PCM output.                      */
     get_attenuation(s, AC97_PCMOUT_VOL, &left, &right, &mute);
     set_attenuation(s, AC97_PCMOUT_VOL, left, right, NO);
@@ -339,6 +344,9 @@ static IOInterruptHandler	oldHandler=NULL;
 
 - (void)stopDMAForChannel:(unsigned int)localChannel read:(BOOL)isRead
 {
+
+    IOLog("%s: stopDMAForChannel localChannel=%d, isRead=%d\n", DRV_TITLE, localChannel, isRead);
+
 				/* Set flag to stop DAC on next irq.         */
 //     simple_lock(s->lock);
 //     if (!isRead)
@@ -363,7 +371,8 @@ static IOInterruptHandler	oldHandler=NULL;
 
 static void clearInterrupts(void)
 {
-    clear_interrupt(s);
+	IOLog("%s: static void clearInterrupts(void) called\n", DRV_TITLE);
+    //clear_interrupt(s);
     return;
 } /* clearInterrupts() */
 
@@ -393,6 +402,8 @@ static void clearInterrupts(void)
 {
     BOOL	stop_dac=NO;
     BOOL	dac_wait=NO;
+
+	IOLog("%s: interruptOccurred\n", DRV_TITLE);
     
     *serviceOutput = NO;
     *serviceInput = NO;
@@ -439,17 +450,24 @@ static void clearInterrupts(void)
 static void clearInt(void *identity, void *state, 
                          unsigned int arg)
 {
-    if (clear_interrupt(s))
-    {
+	IOLog("%s: clearInt %x, %x, %d\n", DRV_TITLE, identity, state, arg);
+	
+	if (clear_interrupt(s))
+	{
 				/* Call original NeXT-handler when
 				   tranferCount is reached                   */
-	if (s->dma_dac2.count >= s->dma_dac2.transferCount)
-	    (*oldHandler)(identity, state, arg);
-	else start_dac2(s);
-    } /* if */
+		if (s->dma_dac2.count >= s->dma_dac2.transferCount) {
+			//if (!oldHandlerInvoked) {
+		    	(*oldHandler)(identity, state, arg);
+			//}
+			oldHandlerInvoked = YES;
+		}
+		//else start_dac2(s);
+	} /* if */
 
 				/* provide support for shared IRQ's          */
-    IOEnableInterrupt(identity);
+	IOEnableInterrupt(identity);
+	//IOSendInterrupt(identity, state, IO_DEVICE_INTERRUPT_MSG);
     return;
 } /* clearInt() */
 
@@ -464,12 +482,15 @@ static void clearInt(void *identity, void *state,
 \*---------------------------------------------------------------------------*/
 
 - (BOOL)getHandler:(IOInterruptHandler *)handler level:(unsigned int *)ipl argument:(unsigned int *)arg forInterrupt:(unsigned int)localInterrupt
-{
+{	
 				/* Get original handler for calling later    */
     [super getHandler:&oldHandler level:ipl argument:arg 
     					forInterrupt:localInterrupt];
 				/* Set our own handler.                      */
     *handler = clearInt;
+	oldHandlerInvoked = 0;
+
+	IOLog("%s: getHandler, %x(old=%x) %x %x interrupt=%d\n", DRV_TITLE, handler, oldHandler, ipl, arg, localInterrupt);
     
     return YES;
 } /* ()getHandler:level:argument:forInterrupt: */

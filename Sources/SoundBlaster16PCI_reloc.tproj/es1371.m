@@ -586,7 +586,7 @@ int clear_interrupt(struct es1371_state *s)
     if (!(intsrc & 0x80000000))
 	return 0;
 
-    spin_lock_irqsave(&s->lock, flags);
+    //spin_lock_irqsave(&s->lock, flags);
 				/* clear audio interrupts first              */
     sctl = s->sctrl;
     if (intsrc & STAT_ADC)
@@ -608,7 +608,7 @@ int clear_interrupt(struct es1371_state *s)
     outl(s->sctrl, s->io+ES1371_REG_SERIAL_CONTROL);
     update_ptr(s);
     
-    spin_unlock_irqrestore(&s->lock, flags);
+    //spin_unlock_irqrestore(&s->lock, flags);
 
     return 1;
 } /* clear_interrupt() */
