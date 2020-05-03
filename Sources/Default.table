@@ -6,5 +6,5 @@
 "Instance" = "0";
 "Driver Name" = "SoundBlaster16PCIDriver";
 "Share IRQ Levels" = "Yes";
-"Version" = "1.0";
+"Version" = "1.1";
 "Driver Version" = "PROGRAM:SoundBlaster16PCIDriver PROJECT:SoundBlaster16PCIDriver DEVELOPER:jens BUILT:NO DATE SET (-B used)";
