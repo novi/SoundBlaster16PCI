@@ -292,7 +292,7 @@ static IOInterruptHandler	oldHandler=NULL;
 	simple_unlock(s->lock);
 
 				/* Start the dac for playback.               */
-	start_dac2(s);
+	start_dac2(s, NO);
     } /* if */
     else return NO;
 
@@ -420,7 +420,7 @@ static void clearInterrupts(void)
 				/* Restart dac if it should continue playback
 				   else stop dac when buffer is empty.       */
     if (!stop_dac || dac_wait)
-	start_dac2(s);
+	start_dac2(s, NO);
     else if (stop_dac)
 	[self doStop:NO];
 
@@ -445,7 +445,7 @@ static void clearInt(void *identity, void *state,
 				   tranferCount is reached                   */
 	if (s->dma_dac2.count >= s->dma_dac2.transferCount)
 	    (*oldHandler)(identity, state, arg);
-	else start_dac2(s);
+	else start_dac2(s, YES);
     } /* if */
 
 				/* provide support for shared IRQ's          */

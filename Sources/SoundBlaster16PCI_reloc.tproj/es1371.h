@@ -295,7 +295,7 @@ extern void set_dac2_rate(struct es1371_state *s, unsigned rate);
 
 extern void start_adc(struct es1371_state *s);
 extern void start_dac1(struct es1371_state *s);
-extern void start_dac2(struct es1371_state *s);
+extern void start_dac2(struct es1371_state *s, BOOL noLock);
 extern int clear_interrupt(struct es1371_state *s);
 extern void stop_adc(struct es1371_state *s);
 extern void stop_dac1(struct es1371_state *s);
