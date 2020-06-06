@@ -1,10 +1,10 @@
 /*---------------------------------------------------------------------------*\
 *	                                                                      *
-*	Copyright (c) 2001 by Jens Heise      	                              *
+*	Copyright (c) 2001-2020 by Jens Heise                                 *
 *	                                                                      *
-*	created: 11.01.2001	              	  modified: 27.05.2001        *
+*	created: 11.01.2001	              	  modified: 20.05.2020        *
 *									      *
-*			Version: 1.0					      *
+*			Version: 1.2					      *
 *-----------------------------------------------------------------------------*
 *	                                                                      *
 *	This program is free software; you can redistribute it and/or         *
