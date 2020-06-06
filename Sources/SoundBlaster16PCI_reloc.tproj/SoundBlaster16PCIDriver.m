@@ -340,14 +340,14 @@ static IOInterruptHandler	oldHandler=NULL;
 - (void)stopDMAForChannel:(unsigned int)localChannel read:(BOOL)isRead
 {
 				/* Set flag to stop DAC on next irq.         */
-//     simple_lock(s->lock);
-//     if (!isRead)
-// 	s->dma_dac2.stop_dac = YES;
-//     else s->dma_adc.stop_dac = YES;
-//     simple_unlock(s->lock);
+    simple_lock(s->lock);
+    if (!isRead)
+	s->dma_dac2.stop_dac = YES;
+    else s->dma_adc.stop_dac = YES;
+    simple_unlock(s->lock);
 
 				/* Stop DAC now.                             */
-    [self doStop:isRead];
+//     [self doStop:isRead];
 
     return;
 } /* ()stopDMAForChannel:read: */
