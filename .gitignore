@@ -1,0 +1,17 @@
+!.dir.tiff
+!.gdbinit
+.nfs*
+*.[oa]
+.lastBuildTime
+*.bundle/
+*.Formatter/
+*.Formatter.dis/
+*.module/
+*.palette/
+*.config/
+i386_obj/
+i386_debug_obj/
+sym/
+*.app/
+*.debug/
+Makefile.dependencies
