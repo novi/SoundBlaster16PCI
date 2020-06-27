@@ -1,10 +1,10 @@
 /*---------------------------------------------------------------------------*\
 *	                                                                      *
-*	Copyright (c) 2001 by Jens Heise      	                              *
+*	Copyright (c) 2001-2020 by Jens Heise                                 *
 *	                                                                      *
-*	created: 11.01.2001	              	  modified: 27.05.2001        *
+*	created: 11.01.2001	              	  modified: 20.05.2020        *
 *									      *
-*			Version: 1.0					      *
+*			Version: 1.2					      *
 *-----------------------------------------------------------------------------*
 *	                                                                      *
 *	This program is free software; you can redistribute it and/or         *
@@ -340,14 +340,14 @@ static IOInterruptHandler	oldHandler=NULL;
 - (void)stopDMAForChannel:(unsigned int)localChannel read:(BOOL)isRead
 {
 				/* Set flag to stop DAC on next irq.         */
-//     simple_lock(s->lock);
-//     if (!isRead)
-// 	s->dma_dac2.stop_dac = YES;
-//     else s->dma_adc.stop_dac = YES;
-//     simple_unlock(s->lock);
+    simple_lock(s->lock);
+    if (!isRead)
+	s->dma_dac2.stop_dac = YES;
+    else s->dma_adc.stop_dac = YES;
+    simple_unlock(s->lock);
 
 				/* Stop DAC now.                             */
-    [self doStop:isRead];
+//     [self doStop:isRead];
 
     return;
 } /* ()stopDMAForChannel:read: */
@@ -647,6 +647,54 @@ static void clearInt(void *identity, void *state,
     [self updateOutputAttenuation];
     return;
 } /* ()updateOutputAttenuationRight */
+
+
+
+/*----------------------------- updateInputGain -----------------------------*\
+*									      *
+*	Update the input gain. We just mute all inputs as recording is        *
+*	not supported.                                                        *
+*									      *
+\*---------------------------------------------------------------------------*/
+
+- updateInputGain
+{
+    set_attenuation(s, AC97_MIC_VOL, 0, 0, 1);
+    set_attenuation(s, AC97_LINEIN_VOL, 0, 0, 1);
+    set_attenuation(s, AC97_CD_VOL, 0, 0, 1);
+    set_attenuation(s, AC97_AUX_VOL, 0, 0, 1);
+    set_attenuation(s, AC97_RECORD_GAIN, 0, 0, 1);
+    set_attenuation(s, AC97_RECORD_GAIN_MIC, 0, 0, 1);
+    return self;
+} /* updateInputGain */
+
+
+
+/*-------------------------- ()updateInputGainLeft --------------------------*\
+*									      *
+*	Updates the left input gain.                                          *
+*									      *
+\*---------------------------------------------------------------------------*/
+
+- (void)updateInputGainLeft
+{
+    [self updateInputGain];
+    return;
+} /* ()updateInputGainLeft */
+
+
+
+/*-------------------------- ()updateInputGainRight -------------------------*\
+*									      *
+*	Updates the right input gain.                                         *
+*									      *
+\*---------------------------------------------------------------------------*/
+
+- (void)updateInputGainRight
+{
+    [self updateInputGain];
+    return;
+} /* ()updateInputGainRight */
 
 
 

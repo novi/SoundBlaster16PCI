@@ -60,4 +60,7 @@
 - (void)updateOutputMute;
 - (void)updateOutputAttenuationLeft;
 - (void)updateOutputAttenuationRight;
+
+- (void)updateInputGainLeft;
+- (void)updateInputGainRight;
 @end
