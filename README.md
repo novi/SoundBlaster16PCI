@@ -1,4 +1,8 @@
-README
+
+Note: VMware Fusion 12 supports legacy Sound Blaster 16 (ISA bus based) emulation.
+We could use official [SoundBlaster 16 PnP](http://www.nextcomputers.org/forums/index.php?msg=26145) driver.
+
+# README
 
 This package contain the driver for the SoundBlaster16PCI and other cards with an es1371 chip for NeXTSTep/Openstep. It is based on the sources for the linux driver which is also included for reference (es1371.c).
 
